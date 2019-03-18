@@ -95,9 +95,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("Current");
-        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
-        markerOptions.getPosition();
-//        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+       /* markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
+        markerOptions.getPosition();*/
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
         marker = gmap.addMarker(markerOptions);
         gmap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         gmap.animateCamera(CameraUpdateFactory.zoomTo(15));
@@ -127,9 +127,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         locationRequest.setInterval(1000);
         locationRequest.setFastestInterval(1000);
 
-        if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED)
-        {
-            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient,locationRequest, this);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
 
         }
 
@@ -149,25 +148,35 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        gmap=googleMap;
+        gmap = googleMap;
         gmap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         gmap.getUiSettings().setZoomControlsEnabled(true);
         gmap.getUiSettings().setZoomGesturesEnabled(true);
         gmap.getUiSettings().setCompassEnabled(true);
 
-        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+       /* if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 buildGoogleApiClient();
                 gmap.setMyLocationEnabled(true );
         }
 
         else
-            {
-                buildGoogleApiClient();
-                gmap.setMyLocationEnabled(true);
-            }
+            {*/
+        buildGoogleApiClient();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        gmap.setMyLocationEnabled(true);
+
     }
-}
+
 
     protected synchronized void buildGoogleApiClient() {
 
